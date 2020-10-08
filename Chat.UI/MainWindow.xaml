@@ -1,0 +1,42 @@
+﻿<Window x:Class="Chat.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chat.UI"
+        xmlns:v="clr-namespace:Chat.UI.View"
+        xmlns:vm="clr-namespace:Chat.UI.ViewModel"
+        xmlns:u="clr-namespace:Chat.UI.Util"
+        xmlns:c="clr-namespace:Chat.UI.Common;assembly=Chat.UI.Common"
+        mc:Ignorable="d"
+        Title="MainWindow">
+    <Window.DataContext>
+        <vm:HomeViewModel x:Name="home">
+            <vm:HomeViewModel.Env>
+                <u:AppEnv />
+            </vm:HomeViewModel.Env>
+        </vm:HomeViewModel>
+    </Window.DataContext>
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLoggedIn}" Value="False">
+                    <Setter Property="MaxHeight" Value="600" />
+                    <Setter Property="MaxWidth" Value="800" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+    <Grid>
+        <Grid Visibility="{Binding IsLoggedIn, Converter={c:BooleanToVisibilityConverter Invert=True}}">
+            <Grid.Background>
+                <ImageBrush ImageSource="/background.jpg" Stretch="UniformToFill"/>
+            </Grid.Background>
+
+            <v:HomeView DataContext="{Binding .}" />
+        </Grid>
+        <Grid Visibility="{Binding IsLoggedIn, Converter={c:BooleanToVisibilityConverter}}" >
+            <v:SessionView DataContext="{Binding CurrentSession}" />
+        </Grid>
+    </Grid>
+</Window>
